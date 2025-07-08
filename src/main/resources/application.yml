@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: Shipment-Simulator
+  profiles:
+    active: dev
+
+# ???? ???
+scheduling:
+  enabled: true

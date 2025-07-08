@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+    <link as="style" href="https://fonts.googleapis.com/css2?display=swap&family=Noto+Sans+KR:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;700;800" onload="this.rel='stylesheet'" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+    <title>CatDogEats Logistics Dashboard</title>
+    <link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link th:href="@{/css/dashboard.css}" rel="stylesheet"/>
+</head>
+<body class="bg-[var(--background-color)] text-[var(--text-primary-color)]">
+<div class="flex min-h-screen flex-col">
+    <!-- Header -->
+    <header class="sticky top-0 z-10 flex h-16 w-full items-center justify-between border-b border-[#f3eee7] bg-[var(--background-color)]/80 px-10 backdrop-blur-sm">
+        <div class="flex items-center gap-4">
+            <div class="text-[var(--primary-color)]">
+                <svg class="size-8" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20Z" fill="currentColor"></path>
+                    <path d="M12 11.55C9.64 11.55 7.7 10.42 6.78 8.68L8.24 7.9C8.92 9.21 10.32 10.05 12 10.05C13.68 10.05 15.08 9.21 15.76 7.9L17.22 8.68C16.3 10.42 14.36 11.55 12 11.55Z" fill="currentColor" opacity="0.3"></path>
+                    <path d="M12 6L11 9L8 10L11 11L12 14L13 11L16 10L13 9L12 6Z" fill="currentColor" opacity="0.3"></path>
+                </svg>
+            </div>
+            <h1 class="text-xl font-bold tracking-tight">CatDogEats Logistics</h1>
+        </div>
+        <nav class="hidden items-center gap-8 md:flex">
+            <a class="text-sm font-medium text-[var(--primary-color)]" href="#">대시보드</a>
+            <a class="text-sm font-medium text-[var(--text-secondary-color)] hover:text-[var(--text-primary-color)]" href="#">주문관리</a>
+            <a class="text-sm font-medium text-[var(--text-secondary-color)] hover:text-[var(--text-primary-color)]" href="#">배송관리</a>
+            <a class="text-sm font-medium text-[var(--text-secondary-color)] hover:text-[var(--text-primary-color)]" href="#">재고관리</a>
+            <a class="text-sm font-medium text-[var(--text-secondary-color)] hover:text-[var(--text-primary-color)]" href="#">고객관리</a>
+            <a class="text-sm font-medium text-[var(--text-secondary-color)] hover:text-[var(--text-primary-color)]" href="#">리포트</a>
+        </nav>
+        <div class="flex items-center gap-4">
+            <button class="relative rounded-full p-2 text-[var(--text-secondary-color)] hover:bg-[#f3eee7] hover:text-[var(--text-primary-color)]">
+                <span class="material-icons">notifications</span>
+            </button>
+            <div class="size-10 rounded-full bg-cover bg-center" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDx_GUwXtyGFkellL1dk1q9Yh123jHSK-1S1A20sqghAszBB3IcUt_GlpZsP73vDDPpe_cOXpBhY_cN-gGMEZ-y0Nz6tWM1ljvDbV97GsFwtb4LHAd-KEq0OKR5LX_WTetE1e9zT2vtCO-NN2pAQ0gAs1dD-6tvElJV9mZa2rFU5vLGSBCOFZyJS3AeZcOO5FDki6Yez8opnfldiO2PbF-Y-g-e2dgRNlY7o2vYhF-c-egtHowuNRcMPWySRmnWhfPHzaGYqay9Sxk");'></div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto max-w-7xl flex-1 px-4 py-8 sm:px-6 lg:px-8">
+        <div class="flex flex-col gap-8">
+            <h2 class="text-3xl font-bold tracking-tight text-[var(--text-primary-color)]">운송장 현황</h2>
+
+            <!-- Statistics Cards -->
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                <div class="card">
+                    <p class="text-sm font-medium text-[var(--text-secondary-color)]">생성된 운송장</p>
+                    <p class="mt-2 text-3xl font-bold text-[var(--text-primary-color)]" th:text="${totalCount ?: 0}">0</p>
+                </div>
+                <div class="card">
+                    <p class="text-sm font-medium text-[var(--text-secondary-color)]">접수</p>
+                    <p class="mt-2 text-3xl font-bold text-blue-600" th:text="${receivedCount ?: 0}">0</p>
+                </div>
+                <div class="card">
+                    <p class="text-sm font-medium text-[var(--text-secondary-color)]">배송 중</p>
+                    <p class="mt-2 text-3xl font-bold text-orange-500" th:text="${inTransitCount ?: 0}">0</p>
+                </div>
+                <div class="card">
+                    <p class="text-sm font-medium text-[var(--text-secondary-color)]">배송 완료</p>
+                    <p class="mt-2 text-3xl font-bold text-green-600" th:text="${deliveredCount ?: 0}">0</p>
+                </div>
+            </div>
+
+            <!-- Search Section -->
+            <div class="card">
+                <h3 class="text-lg font-semibold text-[var(--text-primary-color)]">운송장 조회</h3>
+                <div class="mt-4 flex flex-col gap-4 sm:flex-row">
+                    <div class="relative flex-grow">
+                        <span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-secondary-color)]">search</span>
+                        <input id="searchInput" class="w-full rounded-[var(--border-radius)] border-[#f3eee7] bg-[#fcfaf8] py-2 pl-10 pr-4 text-[var(--text-primary-color)] transition-shadow focus:border-[var(--primary-color)] focus:ring-1 focus:ring-[var(--primary-color)]" placeholder="운송장 번호를 입력하세요" type="text"/>
+                    </div>
+                    <button id="searchBtn" class="btn-primary flex items-center justify-center gap-2 rounded-[var(--border-radius)] px-4 py-2 font-bold shadow-sm transition-transform hover:scale-105">
+                        <span class="material-icons text-base">search</span>
+                        <span>조회</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Recent Tracking List -->
+            <div class="card">
+                <h3 class="text-lg font-semibold text-[var(--text-primary-color)]">최근 운송장 목록</h3>
+                <div class="mt-4 overflow-x-auto">
+                    <table class="w-full min-w-[800px] text-left">
+                        <thead>
+                        <tr class="border-b border-[#f3eee7]">
+                            <th class="py-3 pr-4 text-sm font-semibold text-[var(--text-secondary-color)]">상태</th>
+                            <th class="py-3 pr-4 text-sm font-semibold text-[var(--text-secondary-color)]">운송장 번호</th>
+                            <th class="py-3 pr-4 text-sm font-semibold text-[var(--text-secondary-color)]">택배사</th>
+                            <th class="py-3 pr-4 text-sm font-semibold text-[var(--text-secondary-color)]">등록 시간</th>
+                            <th class="py-3 pr-4 text-sm font-semibold text-[var(--text-secondary-color)]"></th>
+                        </tr>
+                        </thead>
+                        <tbody class="divide-y divide-[#f3eee7]" id="trackingTableBody">
+                        <!-- 더미 데이터 -->
+                        <tr>
+                            <td class="py-4 pr-4">
+                                <span class="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-700">접수</span>
+                            </td>
+                            <td class="py-4 pr-4 text-sm text-[var(--text-secondary-color)]">202407091234-1001</td>
+                            <td class="py-4 pr-4 text-sm text-[var(--text-secondary-color)]">CJ대한통운</td>
+                            <td class="py-4 pr-4 text-sm text-[var(--text-secondary-color)]">2024-07-09 10:00</td>
+                            <td class="py-4 pr-4 text-right">
+                                <button class="detail-btn text-sm font-medium text-[var(--primary-color)] hover:underline" data-tracking="202407091234-1001">상세 보기</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-[#f3eee7] bg-[var(--background-color)] py-4 px-10 text-center text-sm text-[var(--text-secondary-color)]">
+        © 2024 CatDogEats. All Rights Reserved.
+    </footer>
+</div>
+
+<!-- Modal -->
+<div id="trackingModal" class="modal-overlay hidden">
+    <div class="modal-container">
+        <div class="p-6">
+            <div class="flex items-center justify-between pb-4 border-b border-[var(--border-color)]">
+                <h1 class="text-[var(--text-primary-color)] text-xl font-bold">운송장 상세 조회</h1>
+                <button id="closeModalBtn" class="text-[var(--text-secondary-color)] hover:text-[var(--text-primary-color)]">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+            <div id="modalContent">
+                <!-- 모달 내용이 동적으로 로드됩니다 -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/js/dashboard.js}"></script>
+</body>
+</html>

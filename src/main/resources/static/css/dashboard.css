@@ -1,0 +1,231 @@
+/* CSS 변수 정의 */
+:root {
+    --primary-color: #e89830;
+    --background-color: #fcfaf8;
+    --text-primary-color: #1b150e;
+    --text-secondary-color: #666666;
+    --border-color: #e5e7eb;
+    --border-radius: 8px;
+}
+
+/* 기본 폰트 설정 */
+body {
+    font-family: "Plus Jakarta Sans", "Noto Sans KR", sans-serif;
+}
+
+/* 버튼 스타일 */
+.btn-primary {
+    @apply bg-[var(--primary-color)] text-white;
+}
+
+.btn-secondary {
+    @apply bg-transparent border border-[var(--primary-color)] text-[var(--primary-color)];
+}
+
+/* 카드 스타일 */
+.card {
+    @apply bg-white rounded-[var(--border-radius)] shadow-sm p-6;
+}
+
+/* 입력 필드 스타일 */
+.material-input:focus-within {
+    @apply border-[var(--primary-color)] ring-1 ring-[var(--primary-color)];
+}
+
+/* 모달 스타일 */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.modal-container {
+    background-color: var(--background-color);
+    border-radius: 8px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: scale(0.95);
+    transition: transform 0.3s ease-in-out;
+}
+
+.modal-overlay.show .modal-container {
+    transform: scale(1);
+}
+
+/* 상태 표시 점 */
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px;
+}
+
+.status-received {
+    background-color: #3b82f6;
+}
+
+.status-in-transit {
+    background-color: var(--primary-color);
+}
+
+.status-delivered {
+    background-color: #22c55e;
+}
+
+/* 배송 추적 타임라인 스타일 */
+.timeline {
+    position: relative;
+    padding-left: 2rem;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 1rem;
+    top: 0.5rem;
+    bottom: 0.5rem;
+    width: 2px;
+    background-color: var(--border-color);
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.timeline-item:last-child {
+    margin-bottom: 0;
+}
+
+.timeline-dot {
+    position: absolute;
+    left: -2.25rem;
+    top: 0.625rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    background-color: white;
+    border: 2px solid;
+}
+
+.timeline-dot.completed {
+    background-color: #22c55e;
+    border-color: #22c55e;
+    color: white;
+}
+
+.timeline-dot.in-progress {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+.timeline-dot.pending {
+    background-color: #3b82f6;
+    border-color: #3b82f6;
+    color: white;
+}
+
+/* 로딩 스피너 */
+.loading-spinner {
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid var(--primary-color);
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* 숨김 클래스 */
+.hidden {
+    display: none !important;
+}
+
+/* 반응형 설정 */
+@media (max-width: 768px) {
+    .modal-container {
+        max-width: 95%;
+        margin: 1rem;
+    }
+
+    .timeline {
+        padding-left: 1.5rem;
+    }
+
+    .timeline-dot {
+        left: -1.75rem;
+    }
+}
+
+/* 애니메이션 효과 */
+.fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 호버 효과 */
+.detail-btn:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* 테이블 행 호버 효과 */
+tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* 상태 배지 스타일 */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.status-badge.received {
+    background-color: #dbeafe;
+    color: #1d4ed8;
+}
+
+.status-badge.in-transit {
+    background-color: #fed7aa;
+    color: #ea580c;
+}
+
+.status-badge.delivered {
+    background-color: #dcfce7;
+    color: #16a34a;
+}

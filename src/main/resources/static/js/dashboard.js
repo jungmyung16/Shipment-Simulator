@@ -86,16 +86,18 @@ function initializeEventListeners() {
     prevPageBtn.addEventListener('click', () => (currentPage > 0) && loadRecentTrackings(currentPage - 1));
     nextPageBtn.addEventListener('click', () => (currentPage < totalPages - 1) && loadRecentTrackings(currentPage + 1));
 
-    // 이벤트 위임 (상세보기, 삭제, 상태변경)
+    // 이벤트 위임 (상세보기, 삭제, 상태변경) - closest() 사용으로 수정
     document.body.addEventListener('click', (e) => {
-        if (e.target) {
-            if (e.target.classList.contains('detail-btn')) {
-                showTrackingDetail(e.target.getAttribute('data-tracking'));
-            } else if (e.target.classList.contains('delete-btn')) {
-                handleDeleteClick(e.target.getAttribute('data-tracking'));
-            } else if (e.target.id === 'manualLogBtn') {
-                handleManualLogGeneration(e.target.getAttribute('data-tracking'));
-            }
+        const detailBtn = e.target.closest('.detail-btn');
+        const deleteBtn = e.target.closest('.delete-btn');
+        const manualLogBtn = e.target.closest('#manualLogBtn');
+
+        if (detailBtn) {
+            showTrackingDetail(detailBtn.getAttribute('data-tracking'));
+        } else if (deleteBtn) {
+            handleDeleteClick(deleteBtn.getAttribute('data-tracking'));
+        } else if (manualLogBtn) {
+            handleManualLogGeneration(manualLogBtn.getAttribute('data-tracking'));
         }
     });
 }

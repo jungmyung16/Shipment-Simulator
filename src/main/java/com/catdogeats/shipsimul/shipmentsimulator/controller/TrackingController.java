@@ -1,6 +1,7 @@
 package com.catdogeats.shipsimul.shipmentsimulator.controller;
 
 import com.catdogeats.shipsimul.shipmentsimulator.dto.ActiveTrackingResponse;
+import com.catdogeats.shipsimul.shipmentsimulator.dto.TrackingCreateRequest;
 import com.catdogeats.shipsimul.shipmentsimulator.dto.TrackingResponse;
 import com.catdogeats.shipsimul.shipmentsimulator.service.TrackingService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
 
 // 운송장 REST API 컨트롤러
 @RestController
@@ -33,24 +36,26 @@ public class TrackingController {
         return ResponseEntity.ok(activeTrackings);
     }
 
-    // 운송장 수동 생성 (테스트용)
+    // 운송장 수동 생성
     @PostMapping
-    public ResponseEntity<String> createTracking() {
-        String trackingNumber = trackingService.createTracking();
-        return ResponseEntity.ok(trackingNumber);
+    public ResponseEntity<TrackingResponse> createTracking(@RequestBody TrackingCreateRequest request) {
+        String trackingNumber = trackingService.createTracking(request);
+        return trackingService.getTracking(trackingNumber)
+                .map(response -> ResponseEntity.created(URI.create("/api/v1/trackings/" + trackingNumber)).body(response))
+                .orElse(ResponseEntity.internalServerError().build());
     }
 
-    // 로그 수동 생성 (테스트용)
-    @PostMapping("/generate-logs")
-    public ResponseEntity<Void> generateLogs() {
-        trackingService.generateTrackingLogs();
+    // 배송 로그 수동 생성
+    @PostMapping("/{trackingNumber}/generate-log")
+    public ResponseEntity<Void> generateNextLog(@PathVariable String trackingNumber) {
+        trackingService.generateNextLogManually(trackingNumber);
         return ResponseEntity.ok().build();
     }
 
-    // 만료 운송장 수동 삭제 (테스트용)
-    @DeleteMapping("/expired")
-    public ResponseEntity<Void> deleteExpiredTrackings() {
-        trackingService.deleteExpiredTrackings();
-        return ResponseEntity.ok().build();
+    // 운송장 수동 삭제
+    @DeleteMapping("/{trackingNumber}")
+    public ResponseEntity<Void> deleteTracking(@PathVariable String trackingNumber) {
+        trackingService.deleteTracking(trackingNumber);
+        return ResponseEntity.noContent().build();
     }
 }

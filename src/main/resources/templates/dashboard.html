@@ -7,17 +7,8 @@
     <link as="style" href="https://fonts.googleapis.com/css2?display=swap&family=Noto+Sans+KR:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;700;800" onload="" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
     <title>CatDogEats Logistics Dashboard</title>
-
-    <meta property="og:title" content="CatDogEats Logistics Dashboard" />
-    <meta property="og:description" content="실시간으로 생성되는 운송장과 배송 현황을 확인하세요." />
-    <meta property="og:image" content="/images/shipsimul-og.png" />
-    <meta property="og:type" content="website" />
-
-    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-96x96.png">
-    <link rel="manifest" href="/images/site.webmanifest">
-    <link rel="shortcut icon" href="/images/favicon.ico">
-    <link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/> <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link th:href="@{/css/dashboard.css}" rel="stylesheet"/>
 </head>
 <body class="bg-[var(--background-color)] text-[var(--text-primary-color)]">
@@ -33,153 +24,125 @@
             </div>
             <h1 class="text-xl font-bold tracking-tight">CatDogEats Logistics</h1>
         </div>
-        <nav class="hidden items-center gap-8 md:flex">
-            <a class="text-sm font-medium text-[var(--primary-color)]" href="#">대시보드</a>
-            <a class="text-sm font-medium text-[var(--text-secondary-color)] hover:text-[var(--text-primary-color)]" href="#">주문관리</a>
-            <a class="text-sm font-medium text-[var(--text-secondary-color)] hover:text-[var(--text-primary-color)]" href="#">배송관리</a>
-            <a class="text-sm font-medium text-[var(--text-secondary-color)] hover:text-[var(--text-primary-color)]" href="#">재고관리</a>
-            <a class="text-sm font-medium text-[var(--text-secondary-color)] hover:text-[var(--text-primary-color)]" href="#">고객관리</a>
-            <a class="text-sm font-medium text-[var(--text-secondary-color)] hover:text-[var(--text-primary-color)]" href="#">리포트</a>
-        </nav>
-        <div class="flex items-center gap-4">
-        </div>
     </header>
-
 
     <main class="container mx-auto max-w-7xl flex-1 px-4 py-8 sm:px-6 lg:px-8">
         <div class="flex flex-col gap-8">
             <h2 class="text-3xl font-bold tracking-tight text-[var(--text-primary-color)]">운송장 현황</h2>
 
-
             <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                <div class="card">
-                    <p class="text-sm font-medium text-[var(--text-secondary-color)]">생성된 운송장</p>
-                    <p class="mt-2 text-3xl font-bold text-[var(--text-primary-color)]" th:text="${stats.totalCount}">0</p>
-                </div>
-                <div class="card">
-                    <p class="text-sm font-medium text-[var(--text-secondary-color)]">접수</p>
-                    <p class="mt-2 text-3xl font-bold text-blue-600" th:text="${stats.pickedUpCount}">0</p>
-                </div>
-                <div class="card">
-                    <p class="text-sm font-medium text-[var(--text-secondary-color)]">배송 중</p>
-                    <p class="mt-2 text-3xl font-bold text-orange-500" th:text="${stats.inTransitCount}">0</p>
-                </div>
-                <div class="card">
-                    <p class="text-sm font-medium text-[var(--text-secondary-color)]">배송 완료</p>
-                    <p class="mt-2 text-3xl font-bold text-green-600" th:text="${stats.deliveredCount}">0</p>
-                </div>
+                <div class="card"><p class="text-sm font-medium text-[var(--text-secondary-color)]">생성된 운송장</p><p class="mt-2 text-3xl font-bold text-[var(--text-primary-color)]" th:text="${stats.totalCount}">0</p></div>
+                <div class="card"><p class="text-sm font-medium text-[var(--text-secondary-color)]">접수</p><p class="mt-2 text-3xl font-bold text-blue-600" th:text="${stats.pickedUpCount}">0</p></div>
+                <div class="card"><p class="text-sm font-medium text-[var(--text-secondary-color)]">배송 중</p><p class="mt-2 text-3xl font-bold text-orange-500" th:text="${stats.inTransitCount}">0</p></div>
+                <div class="card"><p class="text-sm font-medium text-[var(--text-secondary-color)]">배송 완료</p><p class="mt-2 text-3xl font-bold text-green-600" th:text="${stats.deliveredCount}">0</p></div>
             </div>
-
 
             <div class="card">
                 <h3 class="text-lg font-semibold text-[var(--text-primary-color)]">운송장 조회</h3>
-                <div class="mt-4 flex flex-col gap-4 sm:flex-row">
-                    <div class="relative flex-grow">
-                        <span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-secondary-color)]">search</span>
-                        <label for="searchInput"></label><input id="searchInput" class="w-full rounded-[var(--border-radius)] border-[#f3eee7] bg-[#fcfaf8] py-2 pl-10 pr-4 text-[var(--text-primary-color)] transition-shadow focus:border-[var(--primary-color)] focus:ring-1 focus:ring-[var(--primary-color)]" placeholder="운송장 번호를 입력하세요" type="text"/>
-                    </div>
+                <div class="mt-4 flex flex-col gap-4 sm:flex-row"><div class="relative flex-grow"><span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-secondary-color)]">search</span><label for="searchInput"></label><input id="searchInput" class="w-full rounded-[var(--border-radius)] border-[#f3eee7] bg-[#fcfaf8] py-2 pl-10 pr-4 text-[var(--text-primary-color)] transition-shadow focus:border-[var(--primary-color)] focus:ring-1 focus:ring-[var(--primary-color)]" placeholder="운송장 번호를 입력하세요" type="text"/></div>
                     <button id="searchBtn" class="bg-[var(--primary-color)] text-white flex items-center justify-center gap-2 rounded-[var(--border-radius)] px-4 py-2 font-bold shadow-sm transition-transform hover:scale-105">
-                        <span class="material-icons text-base">search</span>
-                        <span>조회</span>
+                        <span class="material-icons text-base">search</span><span>조회</span>
                     </button>
                 </div>
             </div>
 
-
             <div class="card">
                 <div class="flex justify-between items-center">
                     <h3 class="text-lg font-semibold text-[var(--text-primary-color)]">최근 운송장 목록</h3>
-                    <div id="table-loading-spinner" class="loading-spinner hidden"></div>
+                    <div class="flex items-center gap-2">
+                        <div id="table-loading-spinner" class="loading-spinner hidden"></div>
+                        <button id="createShipmentBtn" class="bg-[var(--primary-color)] text-white flex items-center justify-center gap-2 rounded-[var(--border-radius)] px-4 py-2 font-bold shadow-sm transition-transform hover:scale-105 text-sm">
+                            <span class="material-icons text-base">add</span>
+                            <span>운송장 생성</span>
+                        </button>
+                    </div>
                 </div>
                 <div class="mt-4 overflow-x-auto">
                     <table class="w-full min-w-[800px] text-left">
                         <thead>
-                        <tr class="border-b border-[#f3eee7]">
-                            <th class="py-3 pr-4 text-sm font-semibold text-[var(--text-secondary-color)]">상태</th>
-                            <th class="py-3 pr-4 text-sm font-semibold text-[var(--text-secondary-color)]">운송장 번호</th>
-                            <th class="py-3 pr-4 text-sm font-semibold text-[var(--text-secondary-color)]">택배사</th>
-                            <th class="py-3 pr-4 text-sm font-semibold text-[var(--text-secondary-color)]">등록 시간</th>
-                            <th class="py-3 pr-4 text-sm font-semibold text-[var(--text-secondary-color)]"></th>
-                        </tr>
+                        <tr class="border-b border-[#f3eee7]"><th class="py-3 pr-4 text-sm font-semibold text-[var(--text-secondary-color)]">상태</th><th class="py-3 pr-4 text-sm font-semibold text-[var(--text-secondary-color)]">운송장 번호</th><th class="py-3 pr-4 text-sm font-semibold text-[var(--text-secondary-color)]">택배사</th><th class="py-3 pr-4 text-sm font-semibold text-[var(--text-secondary-color)]">등록 시간</th><th class="py-3 pr-4 text-sm font-semibold text-right text-[var(--text-secondary-color)]">관리</th></tr>
                         </thead>
                         <tbody class="divide-y divide-[#f3eee7]" id="trackingTableBody">
-                        <tr>
-                            <td colspan="5" class="py-8 text-center text-sm text-[var(--text-secondary-color)]">
-                                활성 운송장이 없습니다.
-                            </td>
-                        </tr>
-                        <tr th:each="tracking : ${recentTrackingsPage.content}">
-                            <td class="py-4 pr-4">
-                                 <span th:switch="${tracking.currentStatus.name()}"
-                                       th:classappend="${
-                                            tracking.currentStatus.name() == 'DELIVERED' ? 'delivered' :
-                                           (tracking.currentStatus.name() == 'PICKED_UP' ? 'received' : 'in-transit')
-                                       }"
-                                       class="status-badge">
-                                     <span th:case="'PICKED_UP'">접수</span>
-                                     <span th:case="'DELIVERED'">배송 완료</span>
-                                     <span th:case="*">배송 중</span>
-                                 </span>
-                            </td>
-                            <td class="py-4 pr-4 text-sm text-[var(--text-secondary-color)]" th:text="${tracking.trackingNumber}"></td>
-                            <td class="py-4 pr-4 text-sm text-[var(--text-secondary-color)]" th:text="${carrierNames.get(tracking.carrierCode)}"></td>
-                            <td class="py-4 pr-4 text-sm text-[var(--text-secondary-color)]" th:text="${#temporals.format(tracking.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
-                            <td class="py-4 pr-4 text-right">
-                                <button class="detail-btn text-sm font-medium text-[var(--primary-color)] hover:underline" th:data-tracking="${tracking.trackingNumber}">상세 보기</button>
-                            </td>
-                        </tr>
+                        <th:block>
+                            <tr><td colspan="5" class="py-8 text-center text-sm text-[var(--text-secondary-color)]">활성 운송장이 없습니다.</td></tr>
+                        </th:block>
+                        <th:block>
+                            <tr th:each="tracking : ${recentTrackingsPage.content}" class="fade-in">
+                                <td class="py-4 pr-4">
+                                     <span th:switch="${tracking.currentStatus.name()}" th:classappend="${tracking.currentStatus.name() == 'DELIVERED' ? 'delivered' : (tracking.currentStatus.name() == 'PICKED_UP' ? 'received' : 'in-transit')}" class="status-badge">
+                                         <span th:case="'PICKED_UP'">접수</span>
+                                         <span th:case="'DELIVERED'">배송 완료</span>
+                                         <span th:case="*">배송 중</span>
+                                     </span>
+                                </td>
+                                <td class="py-4 pr-4 text-sm text-[var(--text-secondary-color)]" th:text="${tracking.trackingNumber}"></td>
+                                <td class="py-4 pr-4 text-sm text-[var(--text-secondary-color)]" th:text="${carrierNames.get(tracking.carrierCode)}"></td>
+                                <td class="py-4 pr-4 text-sm text-[var(--text-secondary-color)]" th:text="${#temporals.format(tracking.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
+                                <td class="py-4 pr-4 text-right">
+                                    <button class="detail-btn text-sm font-medium text-[var(--primary-color)] hover:underline" th:data-tracking="${tracking.trackingNumber}">상세 보기</button>
+                                    <button class="delete-btn text-sm font-medium text-red-600 hover:underline ml-4" th:data-tracking="${tracking.trackingNumber}">삭제</button>
+                                </td>
+                            </tr>
+                        </th:block>
                         </tbody>
                     </table>
                 </div>
-                <div id="pagination-controls" class="mt-6 flex items-center justify-between">
-                     <span id="page-info" class="text-sm text-[var(--text-secondary-color)]">
-                        Page <span id="current-page">1</span> of <span id="total-pages">1</span>
-                    </span>
-                    <div class="flex gap-2">
-                        <button id="prev-page-btn" class="pagination-btn">
-                            <span class="material-icons">chevron_left</span>
-                            Previous
-                        </button>
-                        <button id="next-page-btn" class="pagination-btn">
-                            Next
-                            <span class="material-icons">chevron_right</span>
-                        </button>
-                    </div>
+                <div id="pagination-controls" class="mt-6 flex items-center justify-between"><span id="page-info" class="text-sm text-[var(--text-secondary-color)]">Page <span id="current-page">1</span> of <span id="total-pages">1</span></span>
+                    <div class="flex gap-2"><button id="prev-page-btn" class="pagination-btn"><span class="material-icons">chevron_left</span>Previous</button><button id="next-page-btn" class="pagination-btn">Next<span class="material-icons">chevron_right</span></button></div>
                 </div>
             </div>
         </div>
     </main>
 
-
-    <footer class="border-t border-[#f3eee7] bg-[var(--background-color)] py-4 px-10 text-center text-sm text-[var(--text-secondary-color)]">
-        © 2024 CatDogEats. All Rights Reserved.
-    </footer>
+    <footer class="border-t border-[#f3eee7] bg-[var(--background-color)] py-4 px-10 text-center text-sm text-[var(--text-secondary-color)]">© 2024 CatDogEats. All Rights Reserved.</footer>
 </div>
 
-
 <div id="trackingModal" class="modal-overlay hidden">
-    <div class="modal-container">
-        <div class="p-6">
-            <div class="flex items-center justify-between pb-4 border-b border-[var(--border-color)]">
-                <h1 class="text-[var(--text-primary-color)] text-xl font-bold">운송장 상세 조회</h1>
-                <button id="closeModalBtn" class="text-[var(--text-secondary-color)] hover:text-[var(--text-primary-color)]">
-                    <span class="material-icons">close</span>
+    <div class="modal-container"><div class="p-6"><div class="flex items-center justify-between pb-4 border-b border-[var(--border-color)]"><h1 class="text-[var(--text-primary-color)] text-xl font-bold">운송장 상세 조회</h1><button id="closeModalBtn" class="text-[var(--text-secondary-color)] hover:text-[var(--text-primary-color)]"><span class="material-icons">close</span></button></div><div id="modalContent"></div></div></div>
+</div>
+
+<div id="createModal" class="modal-overlay hidden">
+    <div class="modal-container" style="max-width: 400px"><div class="p-6"><div class="flex items-center justify-between pb-4 border-b border-[var(--border-color)]"><h1 class="text-[var(--text-primary-color)] text-xl font-bold">운송장 생성</h1><button id="closeCreateModalBtn" class="text-[var(--text-secondary-color)] hover:text-[var(--text-primary-color)]"><span class="material-icons">close</span></button></div>
+        <div id="createModalContent" class="mt-6">
+            <div><label for="carrierSelect" class="block text-sm font-medium text-[var(--text-secondary-color)] mb-2">택배사 선택</label>
+                <select id="carrierSelect" class="w-full rounded-[var(--border-radius)] border-[#f3eee7] bg-white py-2 px-3 text-[var(--text-primary-color)] transition-shadow focus:border-[var(--primary-color)] focus:ring-1 focus:ring-[var(--primary-color)]">
+                    <option value="01">우체국택배</option><option value="04">CJ대한통운</option><option value="05">한진택배</option><option value="06">로젠택배</option><option value="08">롯데택배</option>
+                </select>
+            </div>
+            <div class="mt-6 flex justify-end">
+                <button id="confirmCreateBtn" class="bg-[var(--primary-color)] text-white flex items-center justify-center gap-2 rounded-[var(--border-radius)] px-4 py-2 font-bold shadow-sm transition-transform hover:scale-105">
+                    <span class="material-icons text-base">add_circle</span><span>생성하기</span>
                 </button>
             </div>
-            <div id="modalContent">
+        </div>
+    </div></div>
+</div>
+
+<div id="deleteModal" class="modal-overlay hidden">
+    <div class="modal-container" style="max-width: 500px"><div class="p-6"><div class="flex items-center justify-between pb-4 border-b border-[var(--border-color)]"><h1 class="text-[var(--text-primary-color)] text-xl font-bold">운송장 삭제 확인</h1><button id="closeDeleteModalBtn" class="text-[var(--text-secondary-color)] hover:text-[var(--text-primary-color)]"><span class="material-icons">close</span></button></div>
+        <div id="deleteModalContent" class="mt-6">
+            <p class="text-sm text-[var(--text-secondary-color)]">삭제 작업을 계속하려면 아래에 운송장 번호를 입력하세요.</p>
+            <p class="my-2 text-center font-mono text-lg font-semibold text-[var(--primary-color)]" id="deleteTrackingNumberText"></p>
+            <input id="deleteConfirmInput" type="text" class="w-full rounded-[var(--border-radius)] border-[#f3eee7] text-center" placeholder="운송장 번호를 그대로 입력하세요">
+            <div class="mt-6 flex justify-end">
+                <button id="confirmDeleteBtn" class="bg-red-600 text-white flex items-center justify-center gap-2 rounded-[var(--border-radius)] px-4 py-2 font-bold shadow-sm transition-transform hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:transform-none" disabled>
+                    <span class="material-icons text-base">delete_forever</span><span>영구 삭제</span>
+                </button>
             </div>
         </div>
-    </div>
+    </div></div>
 </div>
 
 <script th:inline="javascript">
     /* Thymeleaf에서 초기 페이지 정보를 JavaScript 변수로 전달 */
     const initialPageData = {
         totalPages: /*[[${recentTrackingsPage.totalPages}]]*/ 1,
-        currentPage: /*[[${recentTrackingsPage.number}]]*/ 0, // Spring Page는 0부터 시작
+        currentPage: /*[[${recentTrackingsPage.number}]]*/ 0,
         isFirst: /*[[${recentTrackingsPage.first}]]*/ true,
         isLast: /*[[${recentTrackingsPage.last}]]*/ true,
+        isEmpty: /*[[${recentTrackingsPage.empty}]]*/ true
     };
+    const initialTrackings = /*[[${recentTrackingsPage.content}]]*/ [];
 </script>
 <script th:src="@{/js/dashboard.js}"></script>
 </body>

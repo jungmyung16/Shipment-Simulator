@@ -17,18 +17,6 @@ public class SchedulingServiceImpl implements SchedulingService {
 
     private final TrackingService trackingService;
 
-    // 2시간마다 운송장 생성
-    @Override
-    @Scheduled(fixedRate = 2 * 60 * 60 * 1000) // 2시간 = 7,200,000ms
-    public void createTrackingScheduled() {
-        try {
-            String trackingNumber = trackingService.createTracking();
-            log.info("스케줄 운송장 생성 완료: {}", trackingNumber);
-        } catch (Exception e) {
-            log.error("스케줄 운송장 생성 실패", e);
-        }
-    }
-
     // 1시간마다 배송 로그 생성
     @Override
     @Scheduled(fixedRate = 60 * 60 * 1000) // 1시간 = 3,600,000ms

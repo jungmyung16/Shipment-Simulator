@@ -1,6 +1,9 @@
 package com.catdogeats.shipsimul.shipmentsimulator.domain.enums;
 
+import lombok.Getter;
+
 // 배송 상태 enum - 5단계 배송 프로세스 정의
+@Getter
 public enum TrackingStatus {
     PICKED_UP("물품 접수 완료"),
     AT_SORT_HUB("물류센터 도착"),
@@ -12,10 +15,6 @@ public enum TrackingStatus {
 
     TrackingStatus(String description) {
         this.description = description;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     // 다음 상태 반환 - 배송 진행 순서에 따라

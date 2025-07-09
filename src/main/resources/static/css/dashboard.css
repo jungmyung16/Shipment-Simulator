@@ -22,6 +22,15 @@ body {
     @apply bg-transparent border border-[var(--primary-color)] text-[var(--primary-color)];
 }
 
+.pagination-btn {
+    @apply inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+.pagination-btn.disabled {
+    @apply cursor-not-allowed opacity-50;
+}
+
+
 /* 카드 스타일 */
 .card {
     @apply bg-white rounded-[var(--border-radius)] shadow-sm p-6;
@@ -44,23 +53,17 @@ body {
     align-items: center;
     justify-content: center;
     z-index: 50;
-    /*transition: opacity 0.3s ease-in-out;*/
+    backdrop-filter: blur(4px);
 }
 
 .modal-container {
     background-color: var(--background-color);
-    border-radius: 8px;
+    border-radius: 12px;
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     max-width: 600px;
-    width: 100%;
+    width: 95%;
     max-height: 90vh;
     overflow-y: auto;
-    /*transform: scale(0.95);
-    transition: transform 0.3s ease-in-out;*/
-}
-
-.modal-overlay.show .modal-container {
-    transform: scale(1);
 }
 
 /* 상태 표시 점 */
@@ -93,7 +96,7 @@ body {
 .timeline::before {
     content: '';
     position: absolute;
-    left: 1rem;
+    left: calc(1rem - 1px);
     top: 0.5rem;
     bottom: 0.5rem;
     width: 2px;
@@ -111,7 +114,7 @@ body {
 
 .timeline-dot {
     position: absolute;
-    left: -2.25rem;
+    left: calc(-2.25rem + 8px);
     top: 0.625rem;
     display: flex;
     align-items: center;
@@ -136,9 +139,9 @@ body {
 }
 
 .timeline-dot.pending {
-    background-color: #3b82f6;
-    border-color: #3b82f6;
-    color: white;
+    background-color: var(--border-color);
+    border-color: var(--border-color);
+    color: var(--text-secondary-color);
 }
 
 /* 로딩 스피너 */
@@ -153,8 +156,12 @@ body {
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 /* 숨김 클래스 */
@@ -221,8 +228,8 @@ tbody tr:hover {
 }
 
 .status-badge.in-transit {
-    background-color: #fed7aa;
-    color: #ea580c;
+    background-color: #ffedd5;
+    color: #9a3412;
 }
 
 .status-badge.delivered {

@@ -3,13 +3,11 @@ package com.catdogeats.shipsimul.shipmentsimulator.service.impl;
 import com.catdogeats.shipsimul.shipmentsimulator.domain.Tracking;
 import com.catdogeats.shipsimul.shipmentsimulator.domain.TrackingLog;
 import com.catdogeats.shipsimul.shipmentsimulator.domain.enums.TrackingStatus;
-import com.catdogeats.shipsimul.shipmentsimulator.dto.ActiveTrackingResponse;
-import com.catdogeats.shipsimul.shipmentsimulator.dto.DashboardStatsDto;
-import com.catdogeats.shipsimul.shipmentsimulator.dto.TrackingLogResponse;
-import com.catdogeats.shipsimul.shipmentsimulator.dto.TrackingResponse;
+import com.catdogeats.shipsimul.shipmentsimulator.dto.*;
 import com.catdogeats.shipsimul.shipmentsimulator.repository.TrackingLogRepository;
 import com.catdogeats.shipsimul.shipmentsimulator.repository.TrackingRepository;
 import com.catdogeats.shipsimul.shipmentsimulator.service.TrackingService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -33,9 +31,6 @@ public class TrackingServiceImpl implements TrackingService {
     private final TrackingRepository trackingRepository;
     private final TrackingLogRepository trackingLogRepository;
     private final Random random = new Random();
-
-    // 택배사 코드 배열
-    private static final String[] CARRIER_CODES = {"01", "04", "05", "06", "08"};
 
     @Override
     public Optional<TrackingResponse> getTracking(String trackingNumber) {
@@ -62,9 +57,9 @@ public class TrackingServiceImpl implements TrackingService {
 
     @Override
     @Transactional
-    public String createTracking() {
+    public String createTracking(TrackingCreateRequest request) {
         String trackingNumber = generateTrackingNumber();
-        String carrierCode = CARRIER_CODES[random.nextInt(CARRIER_CODES.length)];
+        String carrierCode = request.carrierCode();
 
         Tracking tracking = new Tracking(trackingNumber, carrierCode);
         trackingRepository.save(tracking);
@@ -77,7 +72,7 @@ public class TrackingServiceImpl implements TrackingService {
         );
         trackingLogRepository.save(firstLog);
 
-        log.info("새 운송장 생성: {}, 택배사: {}", trackingNumber, carrierCode);
+        log.info("새 운송장 수동 생성: {}, 택배사: {}", trackingNumber, carrierCode);
         return trackingNumber;
     }
 
@@ -109,8 +104,34 @@ public class TrackingServiceImpl implements TrackingService {
             // 운송장 상태 업데이트
             tracking.updateStatus(nextStatus);
 
-            log.info("로그 생성: {} - {}", tracking.getTrackingNumber(), nextStatus);
+            log.info("스케줄 로그 생성: {} - {}", tracking.getTrackingNumber(), nextStatus);
         }
+    }
+
+    @Override
+    @Transactional
+    public void generateNextLogManually(String trackingNumber) {
+        Tracking tracking = trackingRepository.findById(trackingNumber)
+                .orElseThrow(() -> new EntityNotFoundException("운송장을 찾을 수 없습니다: " + trackingNumber));
+
+        if (tracking.getCurrentStatus().isDelivered()) {
+            log.warn("이미 배송 완료된 운송장입니다: {}", trackingNumber);
+            return;
+        }
+
+        TrackingStatus nextStatus = tracking.getCurrentStatus().getNextStatus();
+
+        // 새 로그 생성 (현재 시간 기준)
+        TrackingLog newLog = new TrackingLog(
+                tracking.getTrackingNumber(),
+                nextStatus,
+                nextStatus.getDescription()
+        );
+        trackingLogRepository.save(newLog);
+
+        // 운송장 상태 업데이트
+        tracking.updateStatus(nextStatus);
+        log.info("수동 로그 생성: {} - {}", tracking.getTrackingNumber(), nextStatus);
     }
 
     @Override
@@ -132,6 +153,19 @@ public class TrackingServiceImpl implements TrackingService {
 
             log.info("만료된 운송장 {}개 삭제: {}", expiredTrackings.size(), trackingNumbers);
         }
+    }
+
+    @Override
+    @Transactional
+    public void deleteTracking(String trackingNumber) {
+        if (!trackingRepository.existsById(trackingNumber)) {
+            throw new EntityNotFoundException("삭제할 운송장을 찾을 수 없습니다: " + trackingNumber);
+        }
+        // 로그 먼저 삭제
+        trackingLogRepository.deleteByTrackingNumber(trackingNumber);
+        // 운송장 삭제
+        trackingRepository.deleteById(trackingNumber);
+        log.info("수동 운송장 삭제 완료: {}", trackingNumber);
     }
 
     // 운송장 번호 생성 - yyyyMMddHHmmss-####

@@ -2,6 +2,7 @@ package com.catdogeats.shipsimul.shipmentsimulator.service;
 
 import com.catdogeats.shipsimul.shipmentsimulator.dto.ActiveTrackingResponse;
 import com.catdogeats.shipsimul.shipmentsimulator.dto.DashboardStatsDto;
+import com.catdogeats.shipsimul.shipmentsimulator.dto.TrackingCreateRequest;
 import com.catdogeats.shipsimul.shipmentsimulator.dto.TrackingResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,12 +22,18 @@ public interface TrackingService {
     // 대시보드 통계 조회
     DashboardStatsDto getDashboardStats();
 
-    // 운송장 생성
-    String createTracking();
+    // 운송장 수동 생성
+    String createTracking(TrackingCreateRequest request);
 
-    // 배송 로그 생성
+    // 배송 로그 생성 (스케줄링용)
     void generateTrackingLogs();
 
-    // 만료된 운송장 삭제
+    // 배송 로그 수동 생성
+    void generateNextLogManually(String trackingNumber);
+
+    // 만료된 운송장 삭제 (스케줄링용)
     void deleteExpiredTrackings();
+
+    // 운송장 수동 삭제
+    void deleteTracking(String trackingNumber);
 }

@@ -7,6 +7,7 @@ WORKDIR /app
 # Gradle 래퍼와 설정 파일들 복사
 COPY gradle/ gradle/
 COPY gradlew gradlew.bat build.gradle settings.gradle ./
+RUN chmod +x gradlew
 
 # 의존성 다운로드 (캐시 최적화)
 RUN ./gradlew dependencies --no-daemon

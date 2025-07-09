@@ -13,7 +13,6 @@
 </head>
 <body class="bg-[var(--background-color)] text-[var(--text-primary-color)]">
 <div class="flex min-h-screen flex-col">
-    <!-- Header -->
     <header class="sticky top-0 z-10 flex h-16 w-full items-center justify-between border-b border-[#f3eee7] bg-[var(--background-color)]/80 px-10 backdrop-blur-sm">
         <div class="flex items-center gap-4">
             <div class="text-[var(--primary-color)]">
@@ -41,32 +40,29 @@
         </div>
     </header>
 
-    <!-- Main Content -->
     <main class="container mx-auto max-w-7xl flex-1 px-4 py-8 sm:px-6 lg:px-8">
         <div class="flex flex-col gap-8">
             <h2 class="text-3xl font-bold tracking-tight text-[var(--text-primary-color)]">운송장 현황</h2>
 
-            <!-- Statistics Cards -->
             <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
                 <div class="card">
                     <p class="text-sm font-medium text-[var(--text-secondary-color)]">생성된 운송장</p>
-                    <p class="mt-2 text-3xl font-bold text-[var(--text-primary-color)]" th:text="${totalCount ?: 0}">0</p>
+                    <p class="mt-2 text-3xl font-bold text-[var(--text-primary-color)]" th:text="${stats.totalCount}">0</p>
                 </div>
                 <div class="card">
                     <p class="text-sm font-medium text-[var(--text-secondary-color)]">접수</p>
-                    <p class="mt-2 text-3xl font-bold text-blue-600" th:text="${receivedCount ?: 0}">0</p>
+                    <p class="mt-2 text-3xl font-bold text-blue-600" th:text="${stats.pickedUpCount}">0</p>
                 </div>
                 <div class="card">
                     <p class="text-sm font-medium text-[var(--text-secondary-color)]">배송 중</p>
-                    <p class="mt-2 text-3xl font-bold text-orange-500" th:text="${inTransitCount ?: 0}">0</p>
+                    <p class="mt-2 text-3xl font-bold text-orange-500" th:text="${stats.inTransitCount}">0</p>
                 </div>
                 <div class="card">
                     <p class="text-sm font-medium text-[var(--text-secondary-color)]">배송 완료</p>
-                    <p class="mt-2 text-3xl font-bold text-green-600" th:text="${deliveredCount ?: 0}">0</p>
+                    <p class="mt-2 text-3xl font-bold text-green-600" th:text="${stats.deliveredCount}">0</p>
                 </div>
             </div>
 
-            <!-- Search Section -->
             <div class="card">
                 <h3 class="text-lg font-semibold text-[var(--text-primary-color)]">운송장 조회</h3>
                 <div class="mt-4 flex flex-col gap-4 sm:flex-row">
@@ -81,7 +77,6 @@
                 </div>
             </div>
 
-            <!-- Recent Tracking List -->
             <div class="card">
                 <h3 class="text-lg font-semibold text-[var(--text-primary-color)]">최근 운송장 목록</h3>
                 <div class="mt-4 overflow-x-auto">
@@ -96,16 +91,29 @@
                         </tr>
                         </thead>
                         <tbody class="divide-y divide-[#f3eee7]" id="trackingTableBody">
-                        <!-- 더미 데이터 -->
-                        <tr>
-                            <td class="py-4 pr-4">
-                                <span class="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-700">접수</span>
+                        <tr th:if="${#lists.isEmpty(recentTrackings)}">
+                            <td colspan="5" class="py-8 text-center text-sm text-[var(--text-secondary-color)]">
+                                활성 운송장이 없습니다.
                             </td>
-                            <td class="py-4 pr-4 text-sm text-[var(--text-secondary-color)]">202407091234-1001</td>
-                            <td class="py-4 pr-4 text-sm text-[var(--text-secondary-color)]">CJ대한통운</td>
-                            <td class="py-4 pr-4 text-sm text-[var(--text-secondary-color)]">2024-07-09 10:00</td>
+                        </tr>
+                        <tr th:each="tracking : ${recentTrackings}">
+                            <td class="py-4 pr-4">
+                                <span th:switch="${tracking.currentStatus.name()}"
+                                      th:classappend="${
+                                           tracking.currentStatus.name() == 'DELIVERED' ? 'delivered' :
+                                          (tracking.currentStatus.name() == 'PICKED_UP' ? 'received' : 'in-transit')
+                                      }"
+                                      class="status-badge">
+                                    <span th:case="'PICKED_UP'">접수</span>
+                                    <span th:case="'DELIVERED'">배송 완료</span>
+                                    <span th:case="*">배송 중</span>
+                                </span>
+                            </td>
+                            <td class="py-4 pr-4 text-sm text-[var(--text-secondary-color)]" th:text="${tracking.trackingNumber}"></td>
+                            <td class="py-4 pr-4 text-sm text-[var(--text-secondary-color)]" th:text="${carrierNames[tracking.carrierCode]}"></td>
+                            <td class="py-4 pr-4 text-sm text-[var(--text-secondary-color)]" th:text="${#temporals.format(tracking.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
                             <td class="py-4 pr-4 text-right">
-                                <button class="detail-btn text-sm font-medium text-[var(--primary-color)] hover:underline" data-tracking="202407091234-1001">상세 보기</button>
+                                <button class="detail-btn text-sm font-medium text-[var(--primary-color)] hover:underline" th:data-tracking="${tracking.trackingNumber}">상세 보기</button>
                             </td>
                         </tr>
                         </tbody>
@@ -115,13 +123,11 @@
         </div>
     </main>
 
-    <!-- Footer -->
     <footer class="border-t border-[#f3eee7] bg-[var(--background-color)] py-4 px-10 text-center text-sm text-[var(--text-secondary-color)]">
         © 2024 CatDogEats. All Rights Reserved.
     </footer>
 </div>
 
-<!-- Modal -->
 <div id="trackingModal" class="modal-overlay hidden">
     <div class="modal-container">
         <div class="p-6">
@@ -132,7 +138,6 @@
                 </button>
             </div>
             <div id="modalContent">
-                <!-- 모달 내용이 동적으로 로드됩니다 -->
             </div>
         </div>
     </div>

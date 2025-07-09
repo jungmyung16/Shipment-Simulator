@@ -306,20 +306,18 @@ function getStatusIcon(status) {
     }
 }
 
-// 모달 열기
+// 모달 열기 (수정됨)
 function openModal() {
+    // 애니메이션 관련 'show' 클래스 및 setTimeout 제거
     modal.classList.remove('hidden');
-    setTimeout(() => modal.classList.add('show'), 10);
     document.body.style.overflow = 'hidden';
 }
 
-// 모달 닫기
+// 모달 닫기 (수정됨)
 function closeModal() {
-    modal.classList.remove('show');
-    setTimeout(() => {
-        modal.classList.add('hidden');
-        document.body.style.overflow = '';
-    }, 300);
+    // 애니메이션 관련 'show' 클래스 및 setTimeout 지연 제거
+    modal.classList.add('hidden');
+    document.body.style.overflow = '';
 }
 
 // 로딩 표시

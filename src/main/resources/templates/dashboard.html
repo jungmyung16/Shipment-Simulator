@@ -33,16 +33,14 @@
             <a class="text-sm font-medium text-[var(--text-secondary-color)] hover:text-[var(--text-primary-color)]" href="#">리포트</a>
         </nav>
         <div class="flex items-center gap-4">
-            <button class="relative rounded-full p-2 text-[var(--text-secondary-color)] hover:bg-[#f3eee7] hover:text-[var(--text-primary-color)]">
-                <span class="material-icons">notifications</span>
-            </button>
-            <div class="size-10 rounded-full bg-cover bg-center" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDx_GUwXtyGFkellL1dk1q9Yh123jHSK-1S1A20sqghAszBB3IcUt_GlpZsP73vDDPpe_cOXpBhY_cN-gGMEZ-y0Nz6tWM1ljvDbV97GsFwtb4LHAd-KEq0OKR5LX_WTetE1e9zT2vtCO-NN2pAQ0gAs1dD-6tvElJV9mZa2rFU5vLGSBCOFZyJS3AeZcOO5FDki6Yez8opnfldiO2PbF-Y-g-e2dgRNlY7o2vYhF-c-egtHowuNRcMPWySRmnWhfPHzaGYqay9Sxk");'></div>
         </div>
     </header>
+
 
     <main class="container mx-auto max-w-7xl flex-1 px-4 py-8 sm:px-6 lg:px-8">
         <div class="flex flex-col gap-8">
             <h2 class="text-3xl font-bold tracking-tight text-[var(--text-primary-color)]">운송장 현황</h2>
+
 
             <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
                 <div class="card">
@@ -63,6 +61,7 @@
                 </div>
             </div>
 
+
             <div class="card">
                 <h3 class="text-lg font-semibold text-[var(--text-primary-color)]">운송장 조회</h3>
                 <div class="mt-4 flex flex-col gap-4 sm:flex-row">
@@ -70,12 +69,13 @@
                         <span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-secondary-color)]">search</span>
                         <input id="searchInput" class="w-full rounded-[var(--border-radius)] border-[#f3eee7] bg-[#fcfaf8] py-2 pl-10 pr-4 text-[var(--text-primary-color)] transition-shadow focus:border-[var(--primary-color)] focus:ring-1 focus:ring-[var(--primary-color)]" placeholder="운송장 번호를 입력하세요" type="text"/>
                     </div>
-                    <button id="searchBtn" class="btn-primary flex items-center justify-center gap-2 rounded-[var(--border-radius)] px-4 py-2 font-bold shadow-sm transition-transform hover:scale-105">
+                    <button id="searchBtn" class="bg-[var(--primary-color)] text-white flex items-center justify-center gap-2 rounded-[var(--border-radius)] px-4 py-2 font-bold shadow-sm transition-transform hover:scale-105">
                         <span class="material-icons text-base">search</span>
                         <span>조회</span>
                     </button>
                 </div>
             </div>
+
 
             <div class="card">
                 <h3 class="text-lg font-semibold text-[var(--text-primary-color)]">최근 운송장 목록</h3>
@@ -98,19 +98,19 @@
                         </tr>
                         <tr th:each="tracking : ${recentTrackings}">
                             <td class="py-4 pr-4">
-                                <span th:switch="${tracking.currentStatus.name()}"
-                                      th:classappend="${
-                                           tracking.currentStatus.name() == 'DELIVERED' ? 'delivered' :
-                                          (tracking.currentStatus.name() == 'PICKED_UP' ? 'received' : 'in-transit')
-                                      }"
-                                      class="status-badge">
-                                    <span th:case="'PICKED_UP'">접수</span>
-                                    <span th:case="'DELIVERED'">배송 완료</span>
-                                    <span th:case="*">배송 중</span>
-                                </span>
+                                 <span th:switch="${tracking.currentStatus.name()}"
+                                       th:classappend="${
+                                            tracking.currentStatus.name() == 'DELIVERED' ? 'delivered' :
+                                           (tracking.currentStatus.name() == 'PICKED_UP' ? 'received' : 'in-transit')
+                                       }"
+                                       class="status-badge">
+                                     <span th:case="'PICKED_UP'">접수</span>
+                                     <span th:case="'DELIVERED'">배송 완료</span>
+                                     <span th:case="*">배송 중</span>
+                                 </span>
                             </td>
                             <td class="py-4 pr-4 text-sm text-[var(--text-secondary-color)]" th:text="${tracking.trackingNumber}"></td>
-                            <td class="py-4 pr-4 text-sm text-[var(--text-secondary-color)]" th:text="${carrierNames[tracking.carrierCode]}"></td>
+                            <td class="py-4 pr-4 text-sm text-[var(--text-secondary-color)]" th:text="${carrierNames.get(tracking.carrierCode)}"></td>
                             <td class="py-4 pr-4 text-sm text-[var(--text-secondary-color)]" th:text="${#temporals.format(tracking.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
                             <td class="py-4 pr-4 text-right">
                                 <button class="detail-btn text-sm font-medium text-[var(--primary-color)] hover:underline" th:data-tracking="${tracking.trackingNumber}">상세 보기</button>
@@ -123,10 +123,12 @@
         </div>
     </main>
 
+
     <footer class="border-t border-[#f3eee7] bg-[var(--background-color)] py-4 px-10 text-center text-sm text-[var(--text-secondary-color)]">
         © 2024 CatDogEats. All Rights Reserved.
     </footer>
 </div>
+
 
 <div id="trackingModal" class="modal-overlay hidden">
     <div class="modal-container">
@@ -142,6 +144,7 @@
         </div>
     </div>
 </div>
+
 
 <script th:src="@{/js/dashboard.js}"></script>
 </body>

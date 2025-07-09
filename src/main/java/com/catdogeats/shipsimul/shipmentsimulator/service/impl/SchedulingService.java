@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 // 스케줄링 서비스
 @Service
 @RequiredArgsConstructor
-@Slf4j
+@Slf4j // Slf4j 어노테이션 추가
 @ConditionalOnProperty(name = "scheduling.enabled", havingValue = "true", matchIfMissing = true)
 public class SchedulingService {
 

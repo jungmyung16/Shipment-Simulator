@@ -1,6 +1,7 @@
 package com.catdogeats.shipsimul.shipmentsimulator.service;
 
 import com.catdogeats.shipsimul.shipmentsimulator.dto.ActiveTrackingResponse;
+import com.catdogeats.shipsimul.shipmentsimulator.dto.DashboardStatsDto;
 import com.catdogeats.shipsimul.shipmentsimulator.dto.TrackingResponse;
 
 import java.util.List;
@@ -14,6 +15,9 @@ public interface TrackingService {
 
     // 활성 운송장 목록 조회
     List<ActiveTrackingResponse> getActiveTrackings();
+
+    // 대시보드 통계 조회
+    DashboardStatsDto getDashboardStats();
 
     // 운송장 생성
     String createTracking();

@@ -4,6 +4,7 @@ import com.catdogeats.shipsimul.shipmentsimulator.domain.Tracking;
 import com.catdogeats.shipsimul.shipmentsimulator.domain.TrackingLog;
 import com.catdogeats.shipsimul.shipmentsimulator.domain.enums.TrackingStatus;
 import com.catdogeats.shipsimul.shipmentsimulator.dto.ActiveTrackingResponse;
+import com.catdogeats.shipsimul.shipmentsimulator.dto.DashboardStatsDto;
 import com.catdogeats.shipsimul.shipmentsimulator.dto.TrackingLogResponse;
 import com.catdogeats.shipsimul.shipmentsimulator.dto.TrackingResponse;
 import com.catdogeats.shipsimul.shipmentsimulator.repository.TrackingLogRepository;
@@ -47,6 +48,17 @@ public class TrackingServiceImpl implements TrackingService {
                 .map(this::convertToActiveTrackingResponse)
                 .toList();
     }
+
+    @Override
+    public DashboardStatsDto getDashboardStats() {
+        long total = trackingRepository.count();
+        long pickedUp = trackingRepository.countByCurrentStatus(TrackingStatus.PICKED_UP);
+        long inTransit = trackingRepository.countInTransit();
+        long delivered = trackingRepository.countByCurrentStatus(TrackingStatus.DELIVERED);
+
+        return new DashboardStatsDto(total, pickedUp, inTransit, delivered);
+    }
+
 
     @Override
     @Transactional
@@ -96,7 +108,6 @@ public class TrackingServiceImpl implements TrackingService {
 
             // 운송장 상태 업데이트
             tracking.updateStatus(nextStatus);
-            trackingRepository.save(tracking);
 
             log.info("로그 생성: {} - {}", tracking.getTrackingNumber(), nextStatus);
         }

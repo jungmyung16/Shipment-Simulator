@@ -20,8 +20,12 @@ public interface TrackingRepository extends JpaRepository<Tracking, String> {
     // 활성 운송장 목록 조회 (삭제되지 않은 것들)
     List<Tracking> findAllByOrderByCreatedAtDesc();
 
-    // 특정 상태의 운송장 조회
-    List<Tracking> findByCurrentStatus(TrackingStatus status);
+    // 특정 상태의 운송장 개수 조회
+    long countByCurrentStatus(TrackingStatus status);
+
+    // '배송 중' 상태인 운송장 개수 조회 (복수 상태)
+    @Query("SELECT COUNT(t) FROM Tracking t WHERE t.currentStatus IN ('AT_SORT_HUB', 'DEPARTED_HUB', 'OUT_FOR_DELIVERY')")
+    long countInTransit();
 
     // 로그 생성이 필요한 운송장 조회 (배송완료가 아닌 것들)
     @Query("SELECT t FROM Tracking t WHERE t.currentStatus != 'DELIVERED'")

@@ -4,7 +4,7 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
-    <link as="style" href="https://fonts.googleapis.com/css2?display=swap&family=Noto+Sans+KR:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;700;800" onload="this.rel='stylesheet'" rel="stylesheet"/>
+    <link as="style" href="https://fonts.googleapis.com/css2?display=swap&family=Noto+Sans+KR:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;700;800" onload="" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
     <title>CatDogEats Logistics Dashboard</title>
     <link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/>
@@ -67,7 +67,7 @@
                 <div class="mt-4 flex flex-col gap-4 sm:flex-row">
                     <div class="relative flex-grow">
                         <span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-secondary-color)]">search</span>
-                        <input id="searchInput" class="w-full rounded-[var(--border-radius)] border-[#f3eee7] bg-[#fcfaf8] py-2 pl-10 pr-4 text-[var(--text-primary-color)] transition-shadow focus:border-[var(--primary-color)] focus:ring-1 focus:ring-[var(--primary-color)]" placeholder="운송장 번호를 입력하세요" type="text"/>
+                        <label for="searchInput"></label><input id="searchInput" class="w-full rounded-[var(--border-radius)] border-[#f3eee7] bg-[#fcfaf8] py-2 pl-10 pr-4 text-[var(--text-primary-color)] transition-shadow focus:border-[var(--primary-color)] focus:ring-1 focus:ring-[var(--primary-color)]" placeholder="운송장 번호를 입력하세요" type="text"/>
                     </div>
                     <button id="searchBtn" class="bg-[var(--primary-color)] text-white flex items-center justify-center gap-2 rounded-[var(--border-radius)] px-4 py-2 font-bold shadow-sm transition-transform hover:scale-105">
                         <span class="material-icons text-base">search</span>
@@ -78,7 +78,10 @@
 
 
             <div class="card">
-                <h3 class="text-lg font-semibold text-[var(--text-primary-color)]">최근 운송장 목록</h3>
+                <div class="flex justify-between items-center">
+                    <h3 class="text-lg font-semibold text-[var(--text-primary-color)]">최근 운송장 목록</h3>
+                    <div id="table-loading-spinner" class="loading-spinner hidden"></div>
+                </div>
                 <div class="mt-4 overflow-x-auto">
                     <table class="w-full min-w-[800px] text-left">
                         <thead>
@@ -91,12 +94,12 @@
                         </tr>
                         </thead>
                         <tbody class="divide-y divide-[#f3eee7]" id="trackingTableBody">
-                        <tr th:if="${#lists.isEmpty(recentTrackings)}">
+                        <tr>
                             <td colspan="5" class="py-8 text-center text-sm text-[var(--text-secondary-color)]">
                                 활성 운송장이 없습니다.
                             </td>
                         </tr>
-                        <tr th:each="tracking : ${recentTrackings}">
+                        <tr th:each="tracking : ${recentTrackingsPage.content}">
                             <td class="py-4 pr-4">
                                  <span th:switch="${tracking.currentStatus.name()}"
                                        th:classappend="${
@@ -118,6 +121,21 @@
                         </tr>
                         </tbody>
                     </table>
+                </div>
+                <div id="pagination-controls" class="mt-6 flex items-center justify-between">
+                     <span id="page-info" class="text-sm text-[var(--text-secondary-color)]">
+                        Page <span id="current-page">1</span> of <span id="total-pages">1</span>
+                    </span>
+                    <div class="flex gap-2">
+                        <button id="prev-page-btn" class="pagination-btn">
+                            <span class="material-icons">chevron_left</span>
+                            Previous
+                        </button>
+                        <button id="next-page-btn" class="pagination-btn">
+                            Next
+                            <span class="material-icons">chevron_right</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -145,7 +163,15 @@
     </div>
 </div>
 
-
+<script th:inline="javascript">
+    /* Thymeleaf에서 초기 페이지 정보를 JavaScript 변수로 전달 */
+    const initialPageData = {
+        totalPages: /*[[${recentTrackingsPage.totalPages}]]*/ 1,
+        currentPage: /*[[${recentTrackingsPage.number}]]*/ 0, // Spring Page는 0부터 시작
+        isFirst: /*[[${recentTrackingsPage.first}]]*/ true,
+        isLast: /*[[${recentTrackingsPage.last}]]*/ true,
+    };
+</script>
 <script th:src="@{/js/dashboard.js}"></script>
 </body>
 </html>

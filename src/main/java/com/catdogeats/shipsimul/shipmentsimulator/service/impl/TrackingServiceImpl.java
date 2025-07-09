@@ -12,6 +12,8 @@ import com.catdogeats.shipsimul.shipmentsimulator.repository.TrackingRepository;
 import com.catdogeats.shipsimul.shipmentsimulator.service.TrackingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,11 +44,9 @@ public class TrackingServiceImpl implements TrackingService {
     }
 
     @Override
-    public List<ActiveTrackingResponse> getActiveTrackings() {
-        return trackingRepository.findAllByOrderByCreatedAtDesc()
-                .stream()
-                .map(this::convertToActiveTrackingResponse)
-                .toList();
+    public Page<ActiveTrackingResponse> getActiveTrackings(Pageable pageable) {
+        return trackingRepository.findAllByOrderByCreatedAtDesc(pageable)
+                .map(this::convertToActiveTrackingResponse);
     }
 
     @Override

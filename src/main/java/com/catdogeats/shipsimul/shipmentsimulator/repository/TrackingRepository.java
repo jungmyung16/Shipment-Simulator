@@ -2,6 +2,8 @@ package com.catdogeats.shipsimul.shipmentsimulator.repository;
 
 import com.catdogeats.shipsimul.shipmentsimulator.domain.Tracking;
 import com.catdogeats.shipsimul.shipmentsimulator.domain.enums.TrackingStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -17,8 +19,8 @@ public interface TrackingRepository extends JpaRepository<Tracking, String> {
     @Query("SELECT t FROM Tracking t WHERE t.deliveredAt IS NOT NULL AND t.deliveredAt < :cutoffTime")
     List<Tracking> findTrackingsToDelete(ZonedDateTime cutoffTime);
 
-    // 활성 운송장 목록 조회 (삭제되지 않은 것들)
-    List<Tracking> findAllByOrderByCreatedAtDesc();
+    // 활성 운송장 목록 조회 (삭제되지 않은 것들) - 페이징 적용
+    Page<Tracking> findAllByOrderByCreatedAtDesc(Pageable pageable);
 
     // 특정 상태의 운송장 개수 조회
     long countByCurrentStatus(TrackingStatus status);

@@ -4,10 +4,11 @@ import com.catdogeats.shipsimul.shipmentsimulator.dto.ActiveTrackingResponse;
 import com.catdogeats.shipsimul.shipmentsimulator.dto.TrackingResponse;
 import com.catdogeats.shipsimul.shipmentsimulator.service.TrackingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 // 운송장 REST API 컨트롤러
 @RestController
@@ -25,10 +26,10 @@ public class TrackingController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // 활성 운송장 목록 조회
+    // 활성 운송장 목록 조회 (페이징 지원)
     @GetMapping("/active")
-    public ResponseEntity<List<ActiveTrackingResponse>> getActiveTrackings() {
-        List<ActiveTrackingResponse> activeTrackings = trackingService.getActiveTrackings();
+    public ResponseEntity<Page<ActiveTrackingResponse>> getActiveTrackings(@PageableDefault() Pageable pageable) {
+        Page<ActiveTrackingResponse> activeTrackings = trackingService.getActiveTrackings(pageable);
         return ResponseEntity.ok(activeTrackings);
     }
 

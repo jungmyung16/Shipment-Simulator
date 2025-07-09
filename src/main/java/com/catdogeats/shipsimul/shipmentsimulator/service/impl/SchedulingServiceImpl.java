@@ -1,5 +1,6 @@
 package com.catdogeats.shipsimul.shipmentsimulator.service.impl;
 
+import com.catdogeats.shipsimul.shipmentsimulator.service.SchedulingService;
 import com.catdogeats.shipsimul.shipmentsimulator.service.TrackingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -7,16 +8,17 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-// 스케줄링 서비스
+// 스케줄링 서비스 구현체
 @Service
 @RequiredArgsConstructor
-@Slf4j // Slf4j 어노테이션 추가
+@Slf4j
 @ConditionalOnProperty(name = "scheduling.enabled", havingValue = "true", matchIfMissing = true)
-public class SchedulingService {
+public class SchedulingServiceImpl implements SchedulingService {
 
     private final TrackingService trackingService;
 
     // 2시간마다 운송장 생성
+    @Override
     @Scheduled(fixedRate = 2 * 60 * 60 * 1000) // 2시간 = 7,200,000ms
     public void createTrackingScheduled() {
         try {
@@ -28,6 +30,7 @@ public class SchedulingService {
     }
 
     // 1시간마다 배송 로그 생성
+    @Override
     @Scheduled(fixedRate = 60 * 60 * 1000) // 1시간 = 3,600,000ms
     public void generateLogsScheduled() {
         try {
@@ -39,6 +42,7 @@ public class SchedulingService {
     }
 
     // 1시간마다 만료된 운송장 삭제 확인
+    @Override
     @Scheduled(fixedRate = 60 * 60 * 1000) // 1시간 = 3,600,000ms
     public void deleteExpiredTrackingsScheduled() {
         try {

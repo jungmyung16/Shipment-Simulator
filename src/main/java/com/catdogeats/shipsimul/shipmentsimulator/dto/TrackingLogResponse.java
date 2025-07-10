@@ -7,7 +7,7 @@ import java.time.ZonedDateTime;
 // 배송 로그 응답 DTO
 public record TrackingLogResponse(
         String id,
-        TrackingStatus status,
+        String  status,
         String description,
         ZonedDateTime timestamp
 ) {

@@ -197,7 +197,7 @@ public class TrackingServiceImpl implements TrackingService {
     private TrackingLogResponse convertToTrackingLogResponse(TrackingLog log) {
         return new TrackingLogResponse(
                 log.getId(),
-                log.getStatus(),
+                log.getStatus().name(),
                 log.getDescription(),
                 log.getTimestamp()
         );

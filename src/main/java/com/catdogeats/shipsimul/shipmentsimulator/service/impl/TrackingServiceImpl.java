@@ -186,7 +186,7 @@ public class TrackingServiceImpl implements TrackingService {
         return new TrackingResponse(
                 tracking.getTrackingNumber(),
                 tracking.getCarrierCode(),
-                tracking.getCurrentStatus(),
+                tracking.getCurrentStatus().name(),
                 tracking.getCreatedAt(),
                 tracking.getDeliveredAt(),
                 logs

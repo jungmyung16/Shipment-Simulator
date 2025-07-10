@@ -1,7 +1,5 @@
 package com.catdogeats.shipsimul.shipmentsimulator.dto;
 
-import com.catdogeats.shipsimul.shipmentsimulator.domain.enums.TrackingStatus;
-
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -9,7 +7,7 @@ import java.util.List;
 public record TrackingResponse(
         String trackingNumber,
         String carrierCode,
-        TrackingStatus currentStatus,
+        String  currentStatus,
         ZonedDateTime createdAt,
         ZonedDateTime deliveredAt,
         List<TrackingLogResponse> logs
